@@ -1,5 +1,6 @@
 package org.example.server;
 
+
 import org.jsmpp.session.MessageReceiverListener;
 import org.jsmpp.session.SMPPServerSession;
 import org.jsmpp.session.SMPPServerSessionListener;
@@ -9,20 +10,20 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class Server {
+public class Server implements Runnable{
 
     Logger logger = LoggerFactory.getLogger(Server.class);
 
     private static final int SMPP_PORT = 8088;
 
-    public void startServer() throws IOException {
+    public void run() {
 
         SMPPServerSessionListener sessionListener;
-
+        //TODO: оформить в один try и разные catch-и
         try{
             sessionListener = new SMPPServerSessionListener(SMPP_PORT);
-            sessionListener.setSessionStateListener(new SessionStateListenerImpl());
-            sessionListener.setMessageReceiverListener(new MessageReceiverListenerImpl());
+            sessionListener.setSessionStateListener(new SessionStateListenerImpl()); //for state changing
+            sessionListener.setMessageReceiverListener(new MessageReceiverListenerImpl()); //receive messages
             logger.info("Server session listener is created!");
 
 
@@ -35,12 +36,14 @@ public class Server {
         if (sessionListener != null) {
             logger.info("...waiting for connection...");
             try {
-
-                SMPPServerSession session = sessionListener.accept();
-                BindRequest bindRequest = session.waitForBind(1000);
-                bindRequest.
-                logger.info("session accepted and bound! id:{}", session.getSessionId());
-
+                while (true) {
+                    SMPPServerSession session = sessionListener.accept();
+                    BindRequest bindRequest = session.waitForBind(1000);
+                    logger.info("session accepted and bound! id:{}", session.getSessionId());
+                    logger.info("bind request type = {}, password = {}", bindRequest.getBindType(),
+                            bindRequest.getPassword());
+                    logger.info("bind sysId = {}", bindRequest.getSystemId());
+                }
 
 
             } catch (Exception e) {
@@ -49,7 +52,11 @@ public class Server {
 
 
         }
-        sessionListener.close();
+        try {
+            sessionListener.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }

@@ -1,6 +1,7 @@
 package org.example;
 
 
+import org.example.client.Client;
 import org.example.server.Server;
 
 import java.io.IOException;
@@ -10,7 +11,11 @@ public class Main {
 
         Server server = new Server();
 
-        server.startServer();
+        Thread th = new Thread(server);
+        th.start();
+
+        Client cl = new Client();
+        cl.sendFromClient("qwew");
 
     }
 }

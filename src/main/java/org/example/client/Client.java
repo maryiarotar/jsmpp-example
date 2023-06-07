@@ -1,6 +1,8 @@
 package org.example.client;
 
 import org.jsmpp.bean.BindType;
+import org.jsmpp.bean.NumberingPlanIndicator;
+import org.jsmpp.bean.TypeOfNumber;
 import org.jsmpp.session.BindParameter;
 import org.jsmpp.session.SMPPSession;
 import org.slf4j.Logger;
@@ -24,11 +26,20 @@ public class Client {
 
             SMPPSession session = new SMPPSession();
 
-            BindParameter bindParametr = new BindParameter(
-                    BindType.BIND_TRX,
-            );
+            //    bindType - is the bind type. (rx, tx, trx)
+            //    systemId - is the system id. (from provider)
+            //    password - is the password. (from provider)
+            //    systemType - is the system type. (C-Octet String ., “EMAIL”, “WWW”, cmt, vms, ota, etc)
+            //    addrTon - is the address TON.
+            //    addrNpi - is the address NPI.
+            //    addressRange - is the address range to which client can send/get messages
+            BindParameter bindParameter = new BindParameter(
+                    BindType.BIND_TRX, DEFAULT_SYSID, DEFAULT_PASS, null,
+                    TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, null);
 
-            session.connectAndBind(HOST, PORT, )
+
+            String SMSCSystemId = session.connectAndBind(HOST, PORT, bindParameter);
+            logger.info("session success, id::{}", SMSCSystemId);
 
         } catch (Exception e) {
             logger.info("Exception in client code::{}", e);
