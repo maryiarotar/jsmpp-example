@@ -4,10 +4,19 @@ import org.jsmpp.bean.*;
 import org.jsmpp.extra.ProcessRequestException;
 import org.jsmpp.session.*;
 
+import java.io.ByteArrayInputStream;
+import java.util.Arrays;
+
 public class MessageReceiverListenerImpl implements ServerMessageReceiverListener {
     @Override
     public SubmitSmResult onAcceptSubmitSm(SubmitSm submitSm, SMPPServerSession smppServerSession)
             throws ProcessRequestException {
+
+        byte[] sms_bytes = submitSm.getShortMessage();
+        String sms = Arrays.toString(sms_bytes);
+        System.out.println("short messages received ----> " + sms);
+
+        //TODO: send to DB
 
         return null;
     }

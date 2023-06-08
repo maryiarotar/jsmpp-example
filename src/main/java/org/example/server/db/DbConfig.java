@@ -19,7 +19,7 @@ public class DbConfig {
     private static Connection conn = null;
     private static String url, name, user, password;
 
-    public static void main(String[] args) {
+    public DbConfig() {
 
         Properties prop = new Properties();
 
@@ -47,9 +47,22 @@ public class DbConfig {
         catch (Exception e) {
             logger.error("Error in reading config.properties! :: {}", e.getMessage());
         }
-
-
     }
+
+
+    public Connection getConnection(){
+        return conn;
+    }
+
+
+//    private void createTableMessages(){
+//
+//        String query_create = "CREATE TABLE IF NOT EXISTS table_name( " +
+//
+//
+//        conn.createStatement();
+//
+//    }
 
 
 }

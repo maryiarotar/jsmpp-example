@@ -8,23 +8,31 @@ import org.jsmpp.session.SMPPSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Client {
+import java.io.IOException;
+
+public class Client implements Runnable {
 
     Logger logger = LoggerFactory.getLogger(Client.class);
 
     private static final String HOST = "localhost";
-    private static final int PORT = 8088;
+    private static final int PORT = 8000;
 
     //systemId & password предоставляются провайдером для идентификации клиента на сервере
-    private static final String DEFAULT_SYSID = "dflt";
-    private static final String DEFAULT_PASS = "1234";
+    private static final String DEFAULT_SYSID = "sns3";
+    private static final String DEFAULT_PASS = "jvSzfAMc";
 
+    private SMPPSession session;
+
+    @Override
+    public void run(){
+
+    }
 
     public void sendFromClient(String str){
 
         try {
 
-            SMPPSession session = new SMPPSession();
+            session = new SMPPSession();
 
             //    bindType - is the bind type. (rx, tx, trx)
             //    systemId - is the system id. (from provider)
@@ -41,8 +49,31 @@ public class Client {
             String SMSCSystemId = session.connectAndBind(HOST, PORT, bindParameter);
             logger.info("session success, id::{}", SMSCSystemId);
 
-        } catch (Exception e) {
-            logger.info("Exception in client code::{}", e);
+            session.setMessageReceiverListener(new MessageReceiverListenerImpl());
+
+
+
+
+
+
+        } catch (IOException e) {
+            logger.info("Exception while binding in client code::{}", e.getMessage());
+        }
+
+    }
+
+    private Runnable sendMessage(String message){
+
+        return new Runnable() {
+            @Override
+            public void run() {
+
+                session.submitShortMessage(
+
+
+                );
+
+            }
         }
 
     }
