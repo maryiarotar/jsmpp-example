@@ -6,7 +6,9 @@ import org.jsmpp.session.*;
 
 public class MessageReceiverListenerImpl implements ServerMessageReceiverListener {
     @Override
-    public SubmitSmResult onAcceptSubmitSm(SubmitSm submitSm, SMPPServerSession smppServerSession) throws ProcessRequestException {
+    public SubmitSmResult onAcceptSubmitSm(SubmitSm submitSm, SMPPServerSession smppServerSession)
+            throws ProcessRequestException {
+
         return null;
     }
 

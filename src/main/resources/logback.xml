@@ -61,5 +61,13 @@
         <appender-ref ref="FILE" />
     </logger>
 
+    <logger level="DEBUG" name="org.example">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+
+    <logger level="DEBUG" name="org.example">
+        <appender-ref ref="FILE" />
+    </logger>
 
 </configuration>
