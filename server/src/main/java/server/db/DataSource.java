@@ -12,9 +12,18 @@ import java.util.Properties;
 
 public class DataSource {
 
-    private static HikariConfig config = new HikariConfig();
+    private static final String propertiesFile = "./config.properties";
+
+    private static HikariConfig config;
+
     private static HikariDataSource ds;
 
+    static {
+        config = new HikariConfig(propertiesFile);
+        ds = new HikariDataSource(config);
+    }
+
+    /*
     private static Properties prop = new Properties();
     static {
         try {
@@ -33,6 +42,9 @@ public class DataSource {
         ds = new HikariDataSource(config);
     }
 
+
+     */
+
     private DataSource(){}
 
     public static void main(String[] args) {
@@ -42,6 +54,16 @@ public class DataSource {
 
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
+    }
+
+    private static Properties loadProperties(String propertiesFile){
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(propertiesFile));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return prop;
     }
 
 }

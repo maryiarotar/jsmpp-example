@@ -21,7 +21,9 @@ public class DbConfig {
 
     public DbConfig() {
 
+
         Properties prop = new Properties();
+
 
         try {
             prop.load(new FileInputStream("./config.properties"));
