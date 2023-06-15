@@ -6,25 +6,25 @@
     <import class="ch.qos.logback.core.ConsoleAppender"/>
     <import class="ch.qos.logback.core.RollingFileAppender"/>
 
-    <appender name="STDOUT" class="ConsoleAppender">
+    <appender name="std" class="ConsoleAppender">
         <encoder class="PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
+            <pattern>_%d{HH:mm:ss}_[%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!--
-    <appender name="FILE" class="FileAppender">
-        <file>logs/all_logs.log</file>
+
+    <appender name="fff" class="FileAppender">
+        <file>/home/maryia/projects/jsmpp-example/logs/all_logs.log</file>
         <append>true</append>
         <immediateFlush>true</immediateFlush>
         <encoder class="PatternLayoutEncoder">
             <pattern>%-4relative [%thread] %-5level %logger{35} -%kvp- %msg%n</pattern>
         </encoder>
     </appender>
-       -->
+
 
 <appender name="FILE" class="RollingFileAppender">
-    <file>logs/all_logs.log</file>
+    <file>/home/maryia/projects/jsmpp-example/logs/all_logs.log</file>
     <append>true</append>
     <immediateFlush>false</immediateFlush>
     <encoder class="PatternLayoutEncoder">
@@ -38,36 +38,28 @@
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
         <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
-    <filter class="ch.qos.logback.classic.filter.LevelFilter">
-        <level>INFO</level>
-        <onMatch>ACCEPT</onMatch>
-        <onMismatch>DENY</onMismatch>
-    </filter>
+    <encoder>
+        <pattern>%d{yyyy.MM.dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M\(%line\) - %msg%n</pattern>
+    </encoder>
 
 </appender>
 
 
+    <logger level="INFO" name="org.example">
+        <appender-ref ref="fff" />
+        <appender-ref ref="std"/>
+    </logger>
+
+    <logger level="DEBUG" name="org.example">
+        <appender-ref ref="fff"/>
+        <appender-ref ref="std"/>
+    </logger>
+
+
     <root>
+        <level name="ALL"/>
         <appender-ref ref="FILE" />
+        <appender-ref ref="std" />
     </root>
-
-
-    <logger level="INFO" name="org.example">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-
-    <logger level="INFO" name="org.example">
-        <appender-ref ref="FILE" />
-    </logger>
-
-    <logger level="DEBUG" name="org.example">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-
-    <logger level="DEBUG" name="org.example">
-        <appender-ref ref="FILE" />
-    </logger>
 
 </configuration>

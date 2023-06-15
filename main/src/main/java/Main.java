@@ -1,13 +1,13 @@
-package org.example;
-
-
-import org.example.client.Client;
-import org.example.server.Server;
+import client.Client;
+import server.Server;
 
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+
+        System.setProperty("logback.configurationFile", "/home/maryia/projects/jsmpp-example/logback.xml");
+
 
         Server server = new Server();
 

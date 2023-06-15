@@ -1,4 +1,4 @@
-package org.example.server;
+package server;
 
 import org.jsmpp.extra.SessionState;
 import org.jsmpp.session.SMPPServerSession;
@@ -17,7 +17,7 @@ public class SessionStateListenerImpl implements SessionStateListener {
     @Override
     public void onStateChange(SessionState newState, SessionState oldState, Session session) {
 
-        logger.info("State changed from " + newState + " to " + oldState +
+        logger.info("State changed from " + oldState + " to " + newState +
                 ", in session with id=" + session.getSessionId());
 
         if (newState == SessionState.OPEN) {

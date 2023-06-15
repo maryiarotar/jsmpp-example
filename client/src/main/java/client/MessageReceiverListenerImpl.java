@@ -1,4 +1,4 @@
-package org.example.client;
+package client;
 
 import org.jsmpp.bean.AlertNotification;
 import org.jsmpp.bean.DataSm;
