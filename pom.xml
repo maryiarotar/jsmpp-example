@@ -21,7 +21,7 @@
 
         <slf4j.version>1.7.16</slf4j.version>
         <mysql-version>8.0.33</mysql-version>
-
+        <hikari-version>3.4.2</hikari-version>
     </properties>
 
     <dependencyManagement>
@@ -89,8 +89,16 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari-version}</version>
+        </dependency>
+
+
 
     </dependencies>
+
 
 <!--
     <build>

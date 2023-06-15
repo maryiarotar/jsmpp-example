@@ -24,10 +24,10 @@ public class DbConfig {
         Properties prop = new Properties();
 
         try {
-            prop.load(new FileInputStream("src/main/resources/config.properties"));
+            prop.load(new FileInputStream("./config.properties"));
             url = prop.getProperty("mysql.db.url");
-            name = prop.getProperty("mysql.db.name");
-            user = prop.getProperty("mysql.db.user");
+            name = prop.getProperty("mysql.db.dbname");
+            user = prop.getProperty("mysql.db.username");
             password = prop.getProperty("mysql.db.password");
 
             String driver = prop.getProperty("db.driver.name");
