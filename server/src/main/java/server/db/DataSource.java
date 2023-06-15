@@ -3,6 +3,8 @@ package server.db;
 import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,18 +14,20 @@ import java.util.Properties;
 
 public class DataSource {
 
+    private static Logger logger = LoggerFactory.getLogger(DataSource.class);
     private static final String propertiesFile = "./config.properties";
-
     private static HikariConfig config;
-
     private static HikariDataSource ds;
 
     static {
         config = new HikariConfig(propertiesFile);
         ds = new HikariDataSource(config);
+
+        logger.info("Configuration for DB is set from ./application.properties! db_url = "
+        + ds.getJdbcUrl() + ", username = " + ds.getUsername() + ", data source = " + ds.getDataSourceProperties());
     }
 
-    /*
+/*
     private static Properties prop = new Properties();
     static {
         try {
@@ -31,24 +35,27 @@ public class DataSource {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        config.setJdbcUrl(prop.getProperty("mysql.db.url", "default")
-                + prop.getProperty("mysql.db.dbname", "default"));
-        config.setUsername(prop.getProperty("mysql.db.username", "default"));
-        config.setPassword(prop.getProperty("mysql.db.password", "default"));
-        config.addDataSourceProperty("cachePrepStmts", prop.getProperty("mysql.db.cachePrepStmts", "false"));
-        config.addDataSourceProperty("prepStmtCacheSize", prop.getProperty("mysql.db.prepStmtCacheSize", "0"));
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", prop.getProperty("mysql.db.prepStmtCacheSqlLimit", "0"));
+        config = new HikariConfig();
+        config.setJdbcUrl(prop.getProperty("jdbcUrl", "default"));
+        config.setUsername(prop.getProperty("username", "default"));
+        config.setPassword(prop.getProperty("password", "default"));
+        config.addDataSourceProperty("cachePrepStmts", prop.getProperty("dataSource.cachePrepStmts", "false"));
+        config.addDataSourceProperty("prepStmtCacheSize", prop.getProperty("dataSource.prepStmtCacheSize", "0"));
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", prop.getProperty("dataSource.prepStmtCacheSqlLimit", "0"));
 
         ds = new HikariDataSource(config);
     }
 
+*/
 
-     */
 
     private DataSource(){}
 
     public static void main(String[] args) {
-        System.out.println(config.getJdbcUrl() + "    " + config.getUsername());
+        System.out.println(config.getJdbcUrl() + ", " + config.getUsername() + ", " + ds.getDataSourceProperties());
+
+        System.out.println(config.getMaxLifetime());
+        System.out.println(config.getIdleTimeout());
     }
 
 
