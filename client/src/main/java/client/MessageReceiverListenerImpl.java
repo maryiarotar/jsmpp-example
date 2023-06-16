@@ -13,7 +13,7 @@ public class MessageReceiverListenerImpl implements MessageReceiverListener {
 
     @Override
     public void onAcceptDeliverSm(DeliverSm deliverSm) throws ProcessRequestException {
-
+        System.out.println("accepted message!");
     }
 
     @Override

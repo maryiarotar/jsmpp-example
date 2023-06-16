@@ -15,7 +15,7 @@ public class Main {
         th.start();
 
         Client cl = new Client();
-        cl.sendFromClient("qwew");
+        cl.sendFromClient("aaaaaaa");
 
     }
 }

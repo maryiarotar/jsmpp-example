@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+@Deprecated
 public class DbConfig {
 
     private static Logger logger = LoggerFactory.getLogger(DbConfig.class);

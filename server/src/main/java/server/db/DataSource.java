@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 
 public class DataSource {
@@ -17,7 +19,7 @@ public class DataSource {
     private static Logger logger = LoggerFactory.getLogger(DataSource.class);
     private static final String propertiesFile = "./config.properties";
     private static HikariConfig config;
-    private static HikariDataSource ds;
+    private static HikariDataSource ds = null;
 
     static {
         config = new HikariConfig(propertiesFile);
@@ -51,12 +53,22 @@ public class DataSource {
 
     private DataSource(){}
 
-    public static void main(String[] args) {
-        System.out.println(config.getJdbcUrl() + ", " + config.getUsername() + ", " + ds.getDataSourceProperties());
-
-        System.out.println(config.getMaxLifetime());
-        System.out.println(config.getIdleTimeout());
-    }
+//    public static void main(String[] args) {
+////        System.out.println(config.getJdbcUrl() + ", " + config.getUsername() + ", " + ds.getDataSourceProperties());
+////
+////        System.out.println(config.getMaxLifetime());
+////        System.out.println(config.getIdleTimeout());
+//
+//
+//        Date date = new Date(System.currentTimeMillis());
+//        String date_str = new SimpleDateFormat("yy:MM:dd HH:mm:ss").format(date);
+//
+//        String query = "INSERT INTO messages (message, date) VALUES ('"
+//                + "MY_MESSAGE" + "' , '" + date_str + "');";
+//
+//        logger.info("new statements is creating...query={" + query + "}");
+//
+//    }
 
 
     public static Connection getConnection() throws SQLException {

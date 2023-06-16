@@ -9,6 +9,7 @@ import org.jsmpp.util.MessageId;
 import org.jsmpp.util.RandomMessageIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import server.db.MySqlRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -21,7 +22,7 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
 
     Logger logger =LoggerFactory.getLogger(MessageReceiverListenerImpl.class);
 
-    
+    MySqlRepository repository = new MySqlRepository();
 
     MessageIDGenerator messageIDGenerator = new RandomMessageIDGenerator();
 
@@ -38,7 +39,7 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
         logger.info("message from client received! =" + sms);
 
         //TODO: send to DB
-
+        repository.insertMessage(sms);
 
         return new SubmitSmResult(messageId, new OptionalParameter[0]);
     }

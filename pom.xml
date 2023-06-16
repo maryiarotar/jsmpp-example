@@ -23,6 +23,7 @@
         <mysql-version>8.0.33</mysql-version>
     </properties>
 
+ <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -32,7 +33,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
+-->
     <dependencies>
 
         <dependency>

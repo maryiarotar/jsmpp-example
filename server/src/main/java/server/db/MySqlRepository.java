@@ -14,18 +14,18 @@ public class MySqlRepository {
 
     Logger logger = LoggerFactory.getLogger(MySqlRepository.class);
 
-    public boolean insert(String message){
+    public boolean insertMessage(String message){
 
         Date date = new Date(System.currentTimeMillis());
-        String date_str = new SimpleDateFormat("yy:MM:dd HH:mm:ss").format("");
+        String date_str = new SimpleDateFormat("yy:MM:dd HH:mm:ss").format(date);
 
         String query = "INSERT INTO messages (message, date) VALUES ('"
-                + message + "' , " + date_str + ");";
+                + message + "' , '" + date_str + "');";
 
         logger.info("new statements is creating...query={" + query + "}");
-        try {
 
-            Connection connection = new DbConfig().getConnection();
+        try {
+            Connection connection = DataSource.getConnection();
 
             Statement statement = connection.createStatement();
 
@@ -39,6 +39,16 @@ public class MySqlRepository {
         }
         return false;
     }
+
+
+    public boolean getAllMessages(){ return false;}
+
+    public boolean getMessageById(){ return false;}
+
+    public boolean deleteById(){ return false;}
+
+    public boolean deleteAll(){ return false;}
+
 
 
 }
