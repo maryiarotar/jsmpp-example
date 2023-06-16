@@ -46,7 +46,7 @@ public class Client implements Runnable {
             //    addrNpi - is the address NPI.
             //    addressRange - is the address range to which client can send/get messages
             BindParameter bindParameter = new BindParameter(
-                    BindType.BIND_TRX, DEFAULT_SYSID, DEFAULT_PASS, "ANY",
+                    BindType.BIND_TRX, DEFAULT_SYSID, DEFAULT_PASS, null,
                     TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, null);
 
 

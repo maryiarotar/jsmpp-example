@@ -1,6 +1,7 @@
 package server;
 
 
+import com.google.inject.Inject;
 import org.jsmpp.PDUStringException;
 import org.jsmpp.session.*;
 import org.slf4j.Logger;
@@ -14,7 +15,8 @@ public class Server implements Runnable{
 
     Logger logger = LoggerFactory.getLogger(Server.class);
 
-    private MySqlRepository repository = new MySqlRepository();
+    @Inject
+    private MySqlRepository repository;
 
     private static int SMPP_PORT = 8011;
 
@@ -45,7 +47,8 @@ public class Server implements Runnable{
                     BindRequest bindRequest = session.waitForBind(5000);
                     //cheking system_id of client in DB
                     String clientId = bindRequest.getSystemId();
-
+//TODO -------------------------
+                    if (repository.getMessageById())
 
 
                     bindRequest.accept("sys");
