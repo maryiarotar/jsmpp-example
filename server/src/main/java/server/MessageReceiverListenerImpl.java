@@ -1,6 +1,7 @@
 package server;
 
-import com.mysql.cj.x.protobuf.MysqlxExpr;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.jsmpp.bean.*;
 import org.jsmpp.extra.ProcessRequestException;
 import org.jsmpp.session.*;
@@ -9,20 +10,20 @@ import org.jsmpp.util.MessageId;
 import org.jsmpp.util.RandomMessageIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.db.MySqlRepository;
+import server.configs.AppInjector;
+import server.db.dto.MessageDto;
+import server.service.MessageService;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class MessageReceiverListenerImpl implements ServerMessageReceiverListener {
 
-    Logger logger =LoggerFactory.getLogger(MessageReceiverListenerImpl.class);
+    Logger logger = LoggerFactory.getLogger(MessageReceiverListenerImpl.class);
 
-    MySqlRepository repository = new MySqlRepository();
+    Injector injector = Guice.createInjector(new AppInjector());
+    MessageService service = injector.getInstance(MessageService.class);
 
     MessageIDGenerator messageIDGenerator = new RandomMessageIDGenerator();
 
@@ -33,13 +34,17 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
         MessageId messageId = messageIDGenerator.newMessageId();
 
         byte[] sms_bytes = submitSm.getShortMessage();
-        String sms = IntStream.range(0, sms_bytes.length).mapToObj(i -> Character.toString((char)sms_bytes[i])).collect(Collectors.joining(""));
+        //String sms = IntStream.range(0, sms_bytes.length).mapToObj(i -> Character.toString((char)sms_bytes[i])).collect(Collectors.joining(""));
+
+        MessageDto messageDto = MessageDto.parseToMessage(sms_bytes);
+
         System.out.println("short messages received ----> " + Arrays.toString(sms_bytes));
 
-        logger.info("message from client received! =" + sms);
+        logger.info("message from client received! =" + messageDto);
 
         //TODO: send to DB
-        repository.insertMessage(sms);
+
+        service.insertMessage(messageDto);
 
         return new SubmitSmResult(messageId, new OptionalParameter[0]);
     }

@@ -1,51 +1,72 @@
 package server.db;
 
+import com.google.inject.Guice;
+import com.sun.javaws.IconUtil;
 import server.db.dto.MessageDto;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
-public class RepositoryImpl implements Repository<String, MessageDto>{
+public class RepositoryImpl<Key, Entity> implements Repository<Key, Entity>{
 
     @Override
-    public MessageDto getById(String s) {
-        return null;
-    }
+    public Entity getById(String table, Key key) throws SQLException {
 
-    @Override
-    public List<MessageDto> getAll() {
-        return null;
-    }
+        Connection connection = DataSource.getConnection();
+        //getting the name of id column
+        ResultSet rs = connection.getMetaData().getColumns(null, null, table, null);
+        rs.next(); //move cursor for the first column (it usually id columns) and get its full name;
+        String idColumnName =  rs.getString("COLUMN_NAME");
 
-    @Override
-    public boolean insert(MessageDto messageDto) {
 
-        try {
-            Connection connection = DataSource.getConnection();
+        String query = "SELECT * FROM " + table + " WHERE " + idColumnName + " = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        if (key instanceof String) { preparedStatement.setString(1, (String) key); }
+        if (key instanceof Long) { preparedStatement.setLong(1, (Long) key); }
+        ResultSet result = preparedStatement.executeQuery();
 
-            Statement statement = connection.createStatement();
+        result.next();
+        int i=1;
+        while (i<=3) {
 
-            boolean result = statement.execute(query);
-
-            logger.info("Query is executed, status=", result);
-            return result;
-
-        } catch (SQLException e) {
-            logger.error("SQL exception when making insert query! : {}", e.getMessage());
+            System.out.println(result.getString(i++));
         }
+        return null;
+    }
 
+    @Override
+    public List<Entity> getAll() {
+        return null;
+    }
+
+    @Override
+    public boolean insert(Entity entity) {
         return false;
     }
 
     @Override
-    public boolean insertAll(List<MessageDto> messageDtos) {
+    public boolean insert(String table, String[] columns, String[] values) throws SQLException {
+
+        String query =  "INSERT INTO " + table + " (" +
+                String.join(",", columns) + ") VALUES (" + String.join(",", values)
+                + ");";
+
+        //System.out.println(query);
+
+        Connection connection = DataSource.getConnection();
+        Statement statement = connection.createStatement();
+        boolean result = statement.execute(query);
+        return result;
+    }
+
+    @Override
+    public boolean insertAll(List<Entity> entities) {
         return false;
     }
 
     @Override
-    public boolean deleteById(String s) {
+    public boolean deleteById(Key key) {
         return false;
     }
+
 }

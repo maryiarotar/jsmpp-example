@@ -1,5 +1,6 @@
 package server.db;
 
+import com.google.inject.Singleton;
 import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+@Singleton
 public class DataSource {
 
     private static Logger logger = LoggerFactory.getLogger(DataSource.class);

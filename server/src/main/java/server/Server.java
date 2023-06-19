@@ -6,7 +6,6 @@ import org.jsmpp.PDUStringException;
 import org.jsmpp.session.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.db.MySqlRepository;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -14,9 +13,6 @@ import java.util.concurrent.TimeoutException;
 public class Server implements Runnable{
 
     Logger logger = LoggerFactory.getLogger(Server.class);
-
-    @Inject
-    private MySqlRepository repository;
 
     private static int SMPP_PORT = 8011;
 
@@ -48,7 +44,7 @@ public class Server implements Runnable{
                     //cheking system_id of client in DB
                     String clientId = bindRequest.getSystemId();
 //TODO -------------------------
-                    if (repository.getMessageById())
+                    //if (repository.getMessageById())
 
 
                     bindRequest.accept("sys");
