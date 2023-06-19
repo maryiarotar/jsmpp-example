@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -20,8 +21,21 @@ public class MessageDto {
     public String message;
     public String date;
 
-    public MessageDto parseToMessage(ResultSet resultSet){
-        return null;
+    public static MessageDto parseToMessage(ResultSet resultSet) throws Exception{
+
+        MessageDto messageDto = null;
+
+        try {
+            Long id = resultSet.getLong(1);
+            String message = resultSet.getString(2);
+            String date = resultSet.getString(3);
+
+            messageDto = createInstance(id, message, date);
+
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+        return messageDto;
     }
 
 

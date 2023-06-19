@@ -1,11 +1,12 @@
 package server.db;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 public interface Repository<Key, Entity> {
 
-    Entity getById(String table, Key key) throws SQLException;
+    ResultSet getById(String table, Key key) throws Exception;
 
     List<Entity> getAll();
 

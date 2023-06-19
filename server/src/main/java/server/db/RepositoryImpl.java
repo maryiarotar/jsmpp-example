@@ -10,7 +10,7 @@ import java.util.List;
 public class RepositoryImpl<Key, Entity> implements Repository<Key, Entity>{
 
     @Override
-    public Entity getById(String table, Key key) throws SQLException {
+    public ResultSet getById(String table, Key key) throws Exception {
 
         Connection connection = DataSource.getConnection();
         //getting the name of id column
@@ -24,14 +24,8 @@ public class RepositoryImpl<Key, Entity> implements Repository<Key, Entity>{
         if (key instanceof String) { preparedStatement.setString(1, (String) key); }
         if (key instanceof Long) { preparedStatement.setLong(1, (Long) key); }
         ResultSet result = preparedStatement.executeQuery();
-
         result.next();
-        int i=1;
-        while (i<=3) {
-
-            System.out.println(result.getString(i++));
-        }
-        return null;
+        return result;
     }
 
     @Override
