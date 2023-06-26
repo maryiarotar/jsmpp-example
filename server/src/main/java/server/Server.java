@@ -8,11 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 public class Server implements Runnable{
 
+    private static final String SERVER_ID = "1234567789-Server";
     Logger logger = LoggerFactory.getLogger(Server.class);
+    ExecutorService executor = Executors.newCachedThreadPool(Executors.defaultThreadFactory());
 
     private static int SMPP_PORT = 8011;
 
@@ -30,27 +34,16 @@ public class Server implements Runnable{
 
         try{
             sessionListener = new SMPPServerSessionListener(SMPP_PORT);
-
             sessionListener.setSessionStateListener(new SessionStateListenerImpl()); //for state changing
             sessionListener.setMessageReceiverListener(messageReceiverListener); //receive messages
 
-            logger.info("Server session listener is created!");
-            logger.info("...waiting for connection...");
+            logger.info("Server session listener is created! ...waiting for connection...");
 
-            try {
-                while (true) {
+            while (true) {
                     SMPPServerSession session = sessionListener.accept();
-                    BindRequest bindRequest = session.waitForBind(5000);
-                    //cheking system_id of client in DB
-                    String clientId = bindRequest.getSystemId();
-//TODO -------------------------
-                    //if (repository.getMessageById())
 
+                    executor.execute(new WaitAndBind(session));
 
-                    bindRequest.accept("sys");
-                    logger.info("session accepted and bound! id:{}", session.getSessionId());
-                    logger.info("bind request: type = {}, sysId = {}", bindRequest.getBindType(),
-                            bindRequest.getSystemId());
 
                     session.setMessageReceiverListener(messageReceiverListener);
 
@@ -62,12 +55,6 @@ public class Server implements Runnable{
                     }
                     session.unbindAndClose();
                     logger.info("server session closed");
-                }
-                } catch (IOException | TimeoutException e) {
-                    sessionListener = null;
-                    logger.info("Something wrong when accepting or binding session request from client:::{}", e);
-                } catch (PDUStringException e) {
-                throw new RuntimeException(e);
             }
             sessionListener.close();
             logger.info("server connectionListener closed");

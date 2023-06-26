@@ -38,13 +38,14 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
 
         MessageDto messageDto = MessageDto.parseToMessage(sms_bytes);
 
-        System.out.println("short messages received ----> " + Arrays.toString(sms_bytes));
+        logger.debug("id={}, message from client received! = {}", messageId, messageDto);
 
-        logger.info("message from client received! =" + messageDto);
+        service.insertMessage(messageDto); //sends to DB (table messages)
 
-        //TODO: send to DB
+        if (SMSCDeliveryReceipt.SUCCESS.containedIn(submitSm.getRegisteredDelivery()) ||
+                SMSCDeliveryReceipt.SUCCESS_FAILURE.containedIn(submitSm.getRegisteredDelivery())) {
 
-        service.insertMessage(messageDto);
+        }
 
         return new SubmitSmResult(messageId, new OptionalParameter[0]);
     }

@@ -22,8 +22,11 @@ public class Client implements Runnable {
     private static final int PORT = 8011;
 
     //systemId & password предоставляются провайдером для идентификации клиента на сервере
-    private static final String DEFAULT_SYSID = "sns3";
-    private static final String DEFAULT_PASS = "jvSzfAMc";
+    //private static final String DEFAULT_SYSID = "sns3";
+    //private static final String DEFAULT_PASS = "jvSzfAMc";
+
+    private static final String DEFAULT_SYSID = "Ivan";
+    private static final String DEFAULT_PASS = "123";
 
     private SMPPSession session;
 
