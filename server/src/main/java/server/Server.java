@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Server implements Runnable{
 
-    private static final String SERVER_ID = "1234567789-Server";
+    private static final String SERVER_ID = "my-Server";
+    private static final int howLongToLive = 60000;
     Logger logger = LoggerFactory.getLogger(Server.class);
     ExecutorService executor = Executors.newCachedThreadPool(Executors.defaultThreadFactory());
 
@@ -44,17 +46,14 @@ public class Server implements Runnable{
 
                     executor.execute(new WaitAndBind(session));
 
-
-                    session.setMessageReceiverListener(messageReceiverListener);
-
                     try {
-                        Thread.sleep(20000);
+                        Thread.sleep(60000);
+                        executor.shutdown();
+                        break;
                     } catch (InterruptedException e) {
-                        //re-interrupt the current thread
-                        Thread.currentThread().interrupt();
+                        throw new RuntimeException(e);
                     }
-                    session.unbindAndClose();
-                    logger.info("server session closed");
+
             }
             sessionListener.close();
             logger.info("server connectionListener closed");
@@ -65,4 +64,14 @@ public class Server implements Runnable{
 
 
     }
+
+
+    //TODO: для имени серверов, каждый из которых запускается в новом потоке, добавить аргумент -int в конец имени его запихнуть
+    public static String getServerId(){
+        return SERVER_ID;
+    }
+
+
+
+
 }

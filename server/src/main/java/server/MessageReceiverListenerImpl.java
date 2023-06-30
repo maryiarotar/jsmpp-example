@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 import server.configs.AppInjector;
 import server.db.dto.MessageDto;
 import server.service.MessageService;
+import server.workers.SubmitSmWorker;
 
 import java.util.Arrays;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,6 +24,7 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
 
     Logger logger = LoggerFactory.getLogger(MessageReceiverListenerImpl.class);
 
+    private PriorityBlockingQueue<MessageDto> queue = new PriorityBlockingQueue<>();
     Injector injector = Guice.createInjector(new AppInjector());
     MessageService service = injector.getInstance(MessageService.class);
 
@@ -38,9 +41,13 @@ public class MessageReceiverListenerImpl implements ServerMessageReceiverListene
 
         MessageDto messageDto = MessageDto.parseToMessage(sms_bytes);
 
+        SubmitSmWorker submitWorker = new SubmitSmWorker();
+        submitWorker.addMessage(messageDto);
+
+
         logger.debug("id={}, message from client received! = {}", messageId, messageDto);
 
-        service.insertMessage(messageDto); //sends to DB (table messages)
+        //service.insertMessage(messageDto); //sends to DB (table messages)
 
         if (SMSCDeliveryReceipt.SUCCESS.containedIn(submitSm.getRegisteredDelivery()) ||
                 SMSCDeliveryReceipt.SUCCESS_FAILURE.containedIn(submitSm.getRegisteredDelivery())) {
